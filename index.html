@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Files: The Dubin's Method Mystery</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+  :root {
+    --cream: #f5f0e8;
+    --dark: #1a1209;
+    --brown: #4a2c0a;
+    --gold: #c8960c;
+    --red: #8b1a1a;
+    --ink: #2c1810;
+    --paper: #faf6ed;
+    --stamp-red: #cc2200;
+    --solved: #1a5c1a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Lora', Georgia, serif;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, #2d1a05 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, #1a0d02 0%, transparent 50%);
+    overflow-x: hidden;
+  }
+
+  /* ── COURSE BANNER ── */
+  .course-banner {
+    background: linear-gradient(135deg, #0d0905 0%, #1e1005 50%, #0d0905 100%);
+    border-bottom: 2px solid rgba(200,150,12,0.3);
+    padding: 18px 24px;
+    text-align: center;
+  }
+
+  .course-name {
+    font-family: 'Courier Prime', monospace;
+    color: var(--gold);
+    font-size: clamp(10px, 1.5vw, 13px);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .school-name {
+    font-family: 'Courier Prime', monospace;
+    color: #7a6040;
+    font-size: clamp(9px, 1.2vw, 11px);
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+
+  .instructors-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px 24px;
+    margin-bottom: 6px;
+  }
+
+  .instructor-tag {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    color: #c8b898;
+    font-size: clamp(10px, 1.3vw, 12px);
+  }
+
+  .instructor-label {
+    font-family: 'Courier Prime', monospace;
+    color: #5a4a30;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .creators-row {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(200,150,12,0.15);
+  }
+
+  .creators-label {
+    font-family: 'Courier Prime', monospace;
+    color: #5a4a30;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .creators-names {
+    font-family: 'Lora', serif;
+    color: #a08060;
+    font-size: clamp(10px, 1.3vw, 12px);
+    letter-spacing: 0.5px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    padding: 40px 20px 20px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--dark);
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    padding: 6px 20px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .title {
+    font-family: 'Special Elite', cursive;
+    font-size: clamp(28px, 5vw, 54px);
+    color: var(--cream);
+    line-height: 1.1;
+    text-shadow: 2px 2px 0 var(--brown), 0 0 40px rgba(200,150,12,0.3);
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    color: #a08060;
+    font-size: 12px;
+    letter-spacing: 3px;
+    font-family: 'Courier Prime', monospace;
+    margin-bottom: 30px;
+  }
+
+  .instruction {
+    max-width: 700px;
+    margin: 0 auto 40px;
+    background: rgba(200,150,12,0.07);
+    border: 1px solid rgba(200,150,12,0.25);
+    border-radius: 3px;
+    padding: 16px 24px;
+    color: #c8a96e;
+    font-size: 14px;
+    line-height: 1.9;
+    text-align: center;
+    font-family: 'Lora', serif;
+  }
+
+  /* ── SCOREBOARD ── */
+  .scoreboard {
+    max-width: 700px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+  }
+
+  .score-bar {
+    background: rgba(200,150,12,0.07);
+    border: 1px solid rgba(200,150,12,0.25);
+    border-radius: 4px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .score-label {
+    font-family: 'Courier Prime', monospace;
+    color: #a08060;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .score-count {
+    font-family: 'Special Elite', cursive;
+    color: var(--gold);
+    font-size: 22px;
+  }
+
+  .progress-dots {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+  }
+
+  .dot {
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: #3a2c1a;
+    border: 1.5px solid #5a4a30;
+    transition: all 0.3s;
+  }
+
+  .dot.answered { background: rgba(200,150,12,0.5); border-color: var(--gold); }
+  .dot.correct-dot { background: var(--solved); border-color: #2a8a2a; }
+
+  /* ── CASES GRID ── */
+  .cases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 26px;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 20px 50px;
+  }
+
+  .case-file {
+    background: var(--paper);
+    border-radius: 2px;
+    position: relative;
+    box-shadow: 5px 5px 25px rgba(0,0,0,0.55), inset 0 0 60px rgba(200,150,12,0.04);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .case-file:hover {
+    transform: translateY(-5px) rotate(0.3deg);
+    box-shadow: 10px 14px 35px rgba(0,0,0,0.65);
+  }
+
+  .tape {
+    position: absolute;
+    top: -8px; left: 50%;
+    transform: translateX(-50%);
+    width: 60px; height: 28px;
+    background: rgba(255,230,150,0.55);
+    z-index: 10;
+    border-radius: 2px;
+  }
+
+  .case-header {
+    padding: 22px 20px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .case-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0; height: 3px;
+    background: repeating-linear-gradient(90deg, var(--gold) 0, var(--gold) 8px, transparent 8px, transparent 16px);
+  }
+
+  .case-number {
+    font-family: 'Courier Prime', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+    opacity: 0.85;
+    text-transform: uppercase;
+  }
+
+  .case-title {
+    font-family: 'Special Elite', cursive;
+    font-size: 17px;
+    color: var(--cream);
+    line-height: 1.3;
+  }
+
+  .status-stamp {
+    position: absolute;
+    top: 16px; right: 16px;
+    font-family: 'Special Elite', cursive;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    border: 2px solid;
+    border-radius: 2px;
+    transform: rotate(8deg);
+    text-transform: uppercase;
+  }
+
+  .status-stamp.open { color: var(--red); border-color: var(--red); background: rgba(139,26,26,0.08); }
+  .status-stamp.closed { color: var(--solved); border-color: var(--solved); background: rgba(26,92,26,0.1); }
+
+  .case-body { padding: 20px; }
+
+  .evidence-photo {
+    width: 78px; height: 78px;
+    float: right;
+    margin: 0 0 12px 16px;
+    background: #d4cbb8;
+    border: 3px solid #b8a88a;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px;
+    position: relative;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    transform: rotate(2deg);
+    flex-shrink: 0;
+  }
+
+  .evidence-photo::after {
+    content: '';
+    position: absolute;
+    top: -10px; left: 50%;
+    transform: translateX(-50%);
+    width: 30px; height: 18px;
+    background: rgba(255,230,150,0.5);
+    border-radius: 1px;
+  }
+
+  .case-story {
+    font-size: 13.5px;
+    color: var(--ink);
+    line-height: 1.9;
+    font-family: 'Lora', serif;
+  }
+
+  .clue-tag {
+    display: inline-block;
+    background: rgba(200,150,12,0.14);
+    border: 1px solid rgba(200,150,12,0.35);
+    color: #6a4400;
+    font-size: 11px;
+    padding: 1px 7px;
+    border-radius: 2px;
+    font-family: 'Courier Prime', monospace;
+    font-weight: 700;
+    margin: 0 1px;
+  }
+
+  /* ── QUESTIONS ── */
+  .questions-section {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 2px dashed #c8b898;
+    clear: both;
+  }
+
+  .questions-label {
+    font-family: 'Special Elite', cursive;
+    font-size: 11px;
+    color: var(--brown);
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+    opacity: 0.8;
+    text-transform: uppercase;
+  }
+
+  .question-item { margin-bottom: 16px; }
+
+  .question-text {
+    font-size: 13px;
+    color: var(--brown);
+    font-weight: 600;
+    margin-bottom: 9px;
+    line-height: 1.5;
+    font-family: 'Lora', serif;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 6px; }
+
+  .option-btn {
+    background: var(--cream);
+    border: 1.5px solid #c8b898;
+    border-radius: 3px;
+    padding: 9px 13px;
+    font-size: 12.5px;
+    color: var(--ink);
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Lora', serif;
+    transition: all 0.15s;
+    line-height: 1.5;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    background: rgba(200,150,12,0.09);
+    border-color: var(--gold);
+    transform: translateX(4px);
+  }
+
+  .option-btn.correct {
+    background: rgba(26,92,26,0.09);
+    border-color: var(--solved);
+    color: var(--solved);
+    font-weight: 600;
+  }
+
+  .option-btn.wrong {
+    background: rgba(139,26,26,0.07);
+    border-color: var(--red);
+    color: var(--red);
+    text-decoration: line-through;
+    opacity: 0.65;
+  }
+
+  .option-btn:disabled { cursor: default; }
+
+  .feedback {
+    margin-top: 8px;
+    padding: 9px 13px;
+    border-radius: 3px;
+    font-size: 12px;
+    line-height: 1.7;
+    font-family: 'Lora', serif;
+    display: none;
+  }
+
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: rgba(26,92,26,0.07); color: #1a5c1a; border-left: 3px solid var(--solved); }
+  .feedback.wrong-fb { background: rgba(139,26,26,0.05); color: var(--red); border-left: 3px solid var(--red); }
+
+  /* ── LESSON REVEAL ── */
+  .lesson-reveal {
+    max-width: 780px;
+    margin: 0 auto 50px;
+    padding: 0 20px;
+    display: none;
+  }
+
+  .lesson-reveal.show { display: block; animation: fadeUp 0.6s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .lesson-box {
+    background: var(--paper);
+    border-top: 4px solid var(--gold);
+    border-radius: 2px;
+    padding: 28px;
+    box-shadow: 5px 5px 25px rgba(0,0,0,0.45);
+  }
+
+  .lesson-title {
+    font-family: 'Special Elite', cursive;
+    font-size: 20px;
+    color: var(--brown);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #d4c4a8;
+  }
+
+  .lesson-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .lesson-card {
+    background: rgba(200,150,12,0.06);
+    border: 1px solid rgba(200,150,12,0.28);
+    border-radius: 3px;
+    padding: 14px;
+  }
+
+  .lesson-card-num {
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .lesson-card-heading {
+    font-family: 'Special Elite', cursive;
+    font-size: 14px;
+    color: var(--brown);
+    margin-bottom: 6px;
+  }
+
+  .lesson-card-text {
+    font-size: 12.5px;
+    color: var(--ink);
+    line-height: 1.7;
+    font-family: 'Lora', serif;
+  }
+
+  .lesson-question {
+    background: rgba(200,150,12,0.07);
+    border: 1px solid rgba(200,150,12,0.25);
+    border-radius: 3px;
+    padding: 16px;
+    font-family: 'Lora', serif;
+    font-size: 13.5px;
+    color: var(--brown);
+    line-height: 1.8;
+  }
+
+  .lesson-question strong {
+    font-family: 'Special Elite', cursive;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 8px;
+    color: var(--gold);
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid rgba(200,150,12,0.15);
+    font-family: 'Courier Prime', monospace;
+    color: #4a3a20;
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+
+  @media (max-width: 600px) {
+    .cases-grid { grid-template-columns: 1fr; }
+    .score-bar { flex-direction: column; text-align: center; }
+    .instructors-row { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COURSE BANNER -->
+<div class="course-banner">
+  <div class="course-name">Theory Development for Human and Organization Development</div>
+  <div class="school-name">Graduate School of Human Resource Development &nbsp;|&nbsp; NIDA, Thailand</div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="badge">🔍 Interactive Workshop</div>
+  <h1 class="title">Case Files:<br>The Dubin's Method Mystery</h1>
+  <p class="subtitle">Detective Series &mdash; PhD Classroom Edition</p>
+
+  <div style="margin: 16px auto 30px; text-align:center; line-height:2;">
+    <div style="font-family:'Courier Prime',monospace; font-size:9px; color:#5a4a30; letter-spacing:2px; text-transform:uppercase; margin-bottom:4px;">Instructors</div>
+    <div style="font-family:'Lora',serif; font-style:italic; color:#c8b898; font-size:clamp(11px,1.4vw,13px); margin-bottom:12px;">
+      Professor Dr. Kenneth Bartlett &nbsp;&amp;&nbsp; Assoc. Prof. Dr. Oranuch Pruetipibultham
+    </div>
+    <div style="font-family:'Courier Prime',monospace; font-size:9px; color:#5a4a30; letter-spacing:2px; text-transform:uppercase; margin-bottom:4px;">Prepared by</div>
+    <div style="font-family:'Lora',serif; color:#a08060; font-size:clamp(11px,1.4vw,13px);">
+      Chutikarn Luesaksiriwattana &nbsp;&amp;&nbsp; Warunyu Nangam
+    </div>
+  </div>
+
+  <div class="instruction">
+    Three research studies. Three unsolved cases.<br>
+    Read each case file carefully &mdash; the <em>clues</em> are hidden inside the story.<br>
+    Your mission: identify <strong>how each researcher used Dubin's method</strong> and why.<br>
+    No guessing. Every answer has a reason.
+  </div>
+</div>
+
+<!-- SCOREBOARD -->
+<div class="scoreboard">
+  <div class="score-bar">
+    <div>
+      <div class="score-label">Cases Solved</div>
+      <div class="score-count" id="scoreDisplay">0 / 6 answered</div>
+    </div>
+    <div class="progress-dots" id="progressDots">
+      <div class="dot" id="dot0"></div>
+      <div class="dot" id="dot1"></div>
+      <div class="dot" id="dot2"></div>
+      <div class="dot" id="dot3"></div>
+      <div class="dot" id="dot4"></div>
+      <div class="dot" id="dot5"></div>
+    </div>
+    <div class="score-label" id="solvedLabel" style="text-align:right;">Solve all cases<br>to reveal the lesson</div>
+  </div>
+</div>
+
+<!-- CASES GRID -->
+<div class="cases-grid">
+
+  <!-- CASE 1 -->
+  <div class="case-file" id="case1">
+    <div class="tape"></div>
+    <div class="case-header" style="background:#4a2c0a;">
+      <div class="case-number">Case File #001 &bull; Piriyapol &amp; Akaraborwon &bull; 2024</div>
+      <div class="case-title">The Missing Theory<br>of Crisis Leadership</div>
+      <div class="status-stamp open" id="stamp1">Open</div>
+    </div>
+    <div class="case-body">
+      <div class="evidence-photo">🚨</div>
+      <p class="case-story">
+        The world was full of crises, yet <span class="clue-tag">Piriyapol &amp; Akaraborwon</span> uncovered a startling truth: no formal theory of crisis leadership existed anywhere in the literature.
+        The two investigators set to work, <span class="clue-tag">reading hundreds of prior studies</span> to gather clues about what crisis leaders truly need.
+        They mapped out a theoretical framework in full &mdash;
+        defining Units, Laws of Interaction, Boundaries, and System States &mdash;
+        then derived <span class="clue-tag">Propositions</span> stating how the theory is expected to operate in the real world &mdash;
+        <span class="clue-tag">without interviewing or surveying a single person</span>.
+        A note was left behind: <em>"Empirical testing is a mission for the next generation of researchers."</em>
+      </p>
+      <div class="questions-section">
+        <div class="questions-label">🔎 Investigation Questions</div>
+
+        <div class="question-item">
+          <div class="question-text">Q1: Which steps of Dubin's method did this study address?</div>
+          <div class="options" id="q1">
+            <button class="option-btn" onclick="answer(this,'q1',false,'Steps 1 through 8 means completing all steps including empirical testing. But this study collected no data and explicitly left testing to future research.')">Steps 1 to 8 &mdash; the complete cycle</button>
+            <button class="option-btn" onclick="answer(this,'q1',true,'Correct! The study addressed Part 1 in full: Steps 1 to 5. This covers Units, Laws of Interaction, Boundaries, System States, and Propositions &mdash; the complete theory development side. No empirical data was collected. Steps 6 to 8 were left for future researchers.')">Steps 1 to 5 &mdash; Part 1 in full</button>
+            <button class="option-btn" onclick="answer(this,'q1',false,'Step 6 refers to developing Empirical Indicators, which requires an existing theoretical framework. This study built the framework from scratch, starting at Step 1.')">Step 6 &mdash; Empirical Indicators only</button>
+          </div>
+          <div class="feedback" id="fb_q1"></div>
+        </div>
+
+        <div class="question-item">
+          <div class="question-text">Q2: Which key characteristic of Dubin's method does this case best illustrate?</div>
+          <div class="options" id="q2">
+            <button class="option-btn" onclick="answer(this,'q2',true,'Correct! This is the clearest example of Theory Before Research. The entire framework was constructed through logic and literature before any empirical inquiry. Theory drove the process; data collection comes later.')">Theory Before Research</button>
+            <button class="option-btn" onclick="answer(this,'q2',false,'Structured yet Flexible refers to distributing steps across multiple studies over time. This case is the originating study that builds the framework from nothing &mdash; it is not continuing someone else\'s work.')">Structured yet Flexible</button>
+            <button class="option-btn" onclick="answer(this,'q2',false,'Designed for Applied Disciplines with Limits refers to the single-level constraint identified by Upton and Egan (2007). That is a different case file entirely.')">Designed for Applied Disciplines &mdash; with Limits</button>
+          </div>
+          <div class="feedback" id="fb_q2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASE 2 -->
+  <div class="case-file" id="case2">
+    <div class="tape"></div>
+    <div class="case-header" style="background:#2a1a4a;">
+      <div class="case-number">Case File #002 &bull; Sritanyarat &amp; Russ-Eft &bull; 2016</div>
+      <div class="case-title">The Instrument Awaiting<br>Its Final Piece</div>
+      <div class="status-stamp open" id="stamp2">Open</div>
+    </div>
+    <div class="case-body">
+      <div class="evidence-photo" style="background:#dcd0ec; border-color:#b8a8d4;">📋</div>
+      <p class="case-story">
+        <span class="clue-tag">Sritanyarat &amp; Russ-Eft</span> inherited a crucial academic legacy &mdash;
+        a theoretically grounded framework of <span class="clue-tag">25 Units for learners' evaluation</span>, built carefully in prior doctoral research.
+        Their mission was to <span class="clue-tag">turn those concepts into something measurable</span>.
+        They consulted three groups: instructors, students, and administrative staff.
+        Then they <span class="clue-tag">surveyed 910 students at NIDA</span> and ran statistical analysis until a reliable 35-item instrument emerged.
+        Mission accomplished &mdash; though Steps 7 and 8 still await a future investigator.
+      </p>
+      <div class="questions-section">
+        <div class="questions-label">🔎 Investigation Questions</div>
+
+        <div class="question-item">
+          <div class="question-text">Q3: Why did this study begin at Step 6 rather than Step 1?</div>
+          <div class="options" id="q3">
+            <button class="option-btn" onclick="answer(this,'q3',false,'Steps 1 to 5 are not too difficult. In fact, they were completed thoroughly and rigorously in earlier doctoral research. That is precisely why this study could skip ahead.')">Because Steps 1 to 5 were too difficult</button>
+            <button class="option-btn" onclick="answer(this,'q3',true,'Correct! This is the heart of Structured yet Flexible. Dubin\'s method does not require one study to do everything. Steps 1 through 5 were already completed in prior work (Sritanyarat, 2014), so this study could build directly upon that foundation.')">Because Steps 1 to 5 had already been completed in prior research</button>
+            <button class="option-btn" onclick="answer(this,'q3',false,'Dubin\'s method has no such rule. Quantitative studies still require a theoretical framework from Steps 1 through 5 before developing indicators at Step 6.')">Because Dubin requires quantitative studies to start at Step 6</button>
+          </div>
+          <div class="feedback" id="fb_q3"></div>
+        </div>
+
+        <div class="question-item">
+          <div class="question-text">Q4: What research approach did this study use?</div>
+          <div class="options" id="q4">
+            <button class="option-btn" onclick="answer(this,'q4',false,'Not purely quantitative. Before the large-scale survey, the researchers used expert panel review and stakeholder consultations &mdash; both qualitative processes &mdash; to assess content validity.')">Quantitative only</button>
+            <button class="option-btn" onclick="answer(this,'q4',false,'Not purely qualitative. The study surveyed 910 students and used Exploratory Factor Analysis and Cronbach\'s Alpha &mdash; clearly quantitative techniques.')">Qualitative only</button>
+            <button class="option-btn" onclick="answer(this,'q4',true,'Correct! The study integrated both approaches. Qualitative input came from expert review (IOC) and stakeholder consultations. Quantitative analysis involved 910 students, EFA, and reliability testing. This shows that Dubin\'s method is methodologically flexible.')">Mixed Methods &mdash; Qualitative and Quantitative combined</button>
+          </div>
+          <div class="feedback" id="fb_q4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASE 3 -->
+  <div class="case-file" id="case3">
+    <div class="tape"></div>
+    <div class="case-header" style="background:#1a3a1a;">
+      <div class="case-number">Case File #003 &bull; Upton &amp; Egan &bull; 2007</div>
+      <div class="case-title">When the Detective Found<br>the Map Was Incomplete</div>
+      <div class="status-stamp open" id="stamp3">Open</div>
+    </div>
+    <div class="case-body">
+      <div class="evidence-photo" style="background:#d0dcd0; border-color:#a8c4a8;">🗺️</div>
+      <p class="case-story">
+        <span class="clue-tag">Upton &amp; Egan</span> set out to build a theory of career development using Dubin's method.
+        But mid-investigation, they uncovered a critical flaw &mdash;
+        <span class="clue-tag">Dubin examines units at only one level of analysis</span>,
+        while career development unfolds simultaneously at the individual, team, and organisational levels.
+        Rather than abandoning the method, they made a bold decision:
+        <span class="clue-tag">they extended Dubin by integrating Multilevel Theory Building</span>,
+        enabling the framework to capture relationships both within and across levels.
+        No primary data was collected &mdash; but a roadmap was left for those who follow.
+      </p>
+      <div class="questions-section">
+        <div class="questions-label">🔎 Investigation Questions</div>
+
+        <div class="question-item">
+          <div class="question-text">Q5: What limitation of Dubin's method did this study uncover?</div>
+          <div class="options" id="q5">
+            <button class="option-btn" onclick="answer(this,'q5',false,'Dubin\'s method is not limited to HRD. It has been applied across many applied disciplines. This was not the limitation Upton and Egan identified.')">It can only be used within HRD</button>
+            <button class="option-btn" onclick="answer(this,'q5',false,'The number of steps was not raised as a concern. Upton and Egan worked within the method\'s structural logic &mdash; they did not find it too complex.')">It has too many steps to complete</button>
+            <button class="option-btn" onclick="answer(this,'q5',true,'Correct! Dubin analyses interactions among units at a single level of analysis. For phenomena like career development in HRD &mdash; which involve individuals, teams, and organisations all at once &mdash; this single-level constraint is a genuine problem.')">It analyses units at only a single level of analysis</button>
+          </div>
+          <div class="feedback" id="fb_q5"></div>
+        </div>
+
+        <div class="question-item">
+          <div class="question-text">Q6: How did Upton and Egan respond to this limitation?</div>
+          <div class="options" id="q6">
+            <button class="option-btn" onclick="answer(this,'q6',false,'They did not abandon Dubin. That is a crucial distinction. They preserved the structural logic of Dubin\'s method and added what was missing &mdash; which is very different from starting over.')">They abandoned Dubin and built an entirely new method</button>
+            <button class="option-btn" onclick="answer(this,'q6',true,'Correct! Rather than discarding Dubin, they extended it by integrating Multilevel Theory Building frameworks. This allowed units and their relationships to be specified both within and across organisational levels &mdash; a powerful adaptation.')">They extended Dubin by integrating Multilevel Theory Building</button>
+            <button class="option-btn" onclick="answer(this,'q6',false,'Collecting more data does not solve a structural single-level constraint. The problem lies in how the theoretical framework is built &mdash; not in the volume of data gathered.')">They collected data from multiple organisational levels</button>
+          </div>
+          <div class="feedback" id="fb_q6"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- LESSON REVEAL -->
+<div class="lesson-reveal" id="lessonReveal">
+  <div class="lesson-box">
+    <div class="lesson-title">🎯 The Hidden Lesson Across All Three Cases</div>
+    <div class="lesson-grid">
+      <div class="lesson-card">
+        <div class="lesson-card-num">Case #001 reveals...</div>
+        <div class="lesson-card-heading">Theory Before Research</div>
+        <div class="lesson-card-text">Dubin always demands that theory comes first. A complete conceptual framework is a legitimate scholarly contribution, even without any data collected.</div>
+      </div>
+      <div class="lesson-card">
+        <div class="lesson-card-num">Case #002 reveals...</div>
+        <div class="lesson-card-heading">Structured yet Flexible</div>
+        <div class="lesson-card-text">Dubin's 8 steps do not need to be completed in a single study. They can accumulate across research projects and build upon one another over time.</div>
+      </div>
+      <div class="lesson-card">
+        <div class="lesson-card-num">Case #003 reveals...</div>
+        <div class="lesson-card-heading">Designed for Practice &mdash; with Limits</div>
+        <div class="lesson-card-text">Dubin works well for applied disciplines, but its single-level constraint is real. Researchers must know the boundaries and be willing to extend the method when the phenomenon demands it.</div>
+      </div>
+    </div>
+    <div class="lesson-question">
+      <strong>🔍 Final Question for Every Detective in the Room</strong>
+      If you were to apply Dubin's method to your own doctoral research &mdash;
+      which case file does your study resemble most closely?
+      And at which step would you begin?
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Theory Development for Human and Organization Development &nbsp;&bull;&nbsp;
+  Graduate School of Human Resource Development, NIDA Thailand
+</div>
+
+<script>
+  let score = 0;
+  let answered = {};
+  const totalQ = 6;
+
+  function answer(btn, qId, isCorrect, explanation) {
+    if (answered[qId]) return;
+    answered[qId] = true;
+
+    const allBtns = document.querySelectorAll('#' + qId + ' .option-btn');
+    allBtns.forEach(b => b.disabled = true);
+
+    const fb = document.getElementById('fb_' + qId);
+    fb.classList.add('show');
+
+    if (isCorrect) {
+      btn.classList.add('correct');
+      fb.classList.add('correct-fb');
+      fb.innerHTML = '&#10003; ' + explanation;
+      score++;
+    } else {
+      btn.classList.add('wrong');
+      fb.classList.add('wrong-fb');
+      fb.innerHTML = '&#10007; ' + explanation;
+      allBtns.forEach(b => {
+        if (!b.classList.contains('wrong')) b.classList.add('correct');
+      });
+    }
+
+    updateProgress(qId, isCorrect);
+    updateScore();
+    checkCaseSolved();
+    checkAllSolved();
+  }
+
+  function updateProgress(qId, isCorrect) {
+    const idx = parseInt(qId.replace('q', '')) - 1;
+    const dot = document.getElementById('dot' + idx);
+    if (dot) {
+      dot.classList.add('answered');
+      if (isCorrect) dot.classList.add('correct-dot');
+    }
+  }
+
+  function updateScore() {
+    const total = Object.keys(answered).length;
+    document.getElementById('scoreDisplay').textContent = score + ' correct / ' + total + ' answered';
+  }
+
+  function checkCaseSolved() {
+    const cases = [
+      { stamp: 'stamp1', qs: ['q1','q2'] },
+      { stamp: 'stamp2', qs: ['q3','q4'] },
+      { stamp: 'stamp3', qs: ['q5','q6'] },
+    ];
+    cases.forEach(c => {
+      if (c.qs.every(q => answered[q])) {
+        const s = document.getElementById(c.stamp);
+        s.textContent = 'Solved';
+        s.classList.remove('open');
+        s.classList.add('closed');
+      }
+    });
+  }
+
+  function checkAllSolved() {
+    if (Object.keys(answered).length === totalQ) {
+      document.getElementById('lessonReveal').classList.add('show');
+      document.getElementById('solvedLabel').innerHTML = '&#127881; All cases solved!<br>See the lesson below';
+      document.getElementById('scoreDisplay').textContent = score + ' correct / 6 answered';
+      setTimeout(() => {
+        document.getElementById('lessonReveal').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 400);
+    }
+  }
+</script>
+
+</body>
+</html>
